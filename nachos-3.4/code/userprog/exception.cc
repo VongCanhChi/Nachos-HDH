@@ -25,28 +25,7 @@
 #include "system.h"
 #include "syscall.h"
 
-//----------------------------------------------------------------------
-// ExceptionHandler
-// 	Entry point into the Nachos kernel.  Called when a user program
-//	is executing, and either does a syscall, or generates an addressing
-//	or arithmetic exception.
-//
-// 	For system calls, the following is the calling convention:
-//
-// 	system call code -- r2
-//		arg1 -- r4
-//		arg2 -- r5
-//		arg3 -- r6
-//		arg4 -- r7
-//
-//	The result of the system call, if any, must be put back into r2. 
-//
-// And don't forget to increment the pc before returning. (Or else you'll
-// loop making the same system call forever!
-//
-//	"which" is the kind of exception.  The list of possible exceptions 
-//	are in machine.h.
-//----------------------------------------------------------------------
+
 
 void IncreasePC()
 {
@@ -57,9 +36,7 @@ void IncreasePC()
    	machine->WriteRegister(NextPCReg, counter + 4);
 }
 
-// Input: Khong gian dia chi User(int) - gioi han cua buffer(int)
-// Output: Bo nho dem Buffer(char*)
-// Chuc nang: Sao chep vung nho User sang vung nho System
+// Ham sao chep vung nho User sang vung nho System.
 char* User2System(int virtAddr, int limit)
 {
 	int i; //chi so index
@@ -81,10 +58,7 @@ char* User2System(int virtAddr, int limit)
 	return kernelBuf;
 }
 
-
-// Input: Khong gian vung nho User(int) - gioi han cua buffer(int) - bo nho dem buffer(char*)
-// Output: So byte da sao chep(int)
-// Chuc nang: Sao chep vung nho System sang vung nho User
+// Ham sao chep vung nho System sang vung nho User.
 int System2User(int virtAddr, int len, char* buffer)
 {
 	if (len < 0) return -1;
@@ -100,15 +74,11 @@ int System2User(int virtAddr, int len, char* buffer)
 }
 
 
-// Ham xu ly ngoai le runtime Exception va system call
+// Ham xu ly ngoai le
 void ExceptionHandler(ExceptionType which)
 {
     	int type = machine->ReadRegister(2);
-
-	// Bien toan cuc cho lop SynchConsole
 	
-	
-	//Bat dau
 	switch (which) {
 	case NoException:
 		return;
@@ -166,42 +136,23 @@ void ExceptionHandler(ExceptionType which)
 		}
 		case SC_ReadInt:{
                     char* buffer;
-                    int MAX_BUFFER = 255;
+                    int MAX_BUFFER = 20; // So lon nhat ma c++ co the bieu dien duoc gom khong qua 20 chu so.
                     buffer = new char[MAX_BUFFER + 1];
                     int numbytes = gSynchConsole->Read(buffer, MAX_BUFFER);
-                    int number = 0; 
-                    bool isNegative = false; 
+                    int number = 0;
+                    bool isNegative = false;
                     int firstNumIndex = 0;
                     int lastNumIndex = 0;
-                    if(buffer[0] == '-')
+                    if(buffer[0] == '-') // Xu ly khi nhap so am.
                     {
                         isNegative = true;
                         firstNumIndex = 1;
                         lastNumIndex = 1;                        			   		
                     }
                                        
-                    for(int i = firstNumIndex; i < numbytes; i++)					
+                    for(int i = firstNumIndex; i < numbytes; i++)				
                     {
-                        if(buffer[i] == '.') 
-                        {
-                            int j = i + 1;
-                            for(; j < numbytes; j++)
-                            {				
-                                if(buffer[j] != '0')
-                                {
-                                    printf("\n\n The integer number is not valid");
-                                    DEBUG('a', "\n The integer number is not valid");
-                                    machine->WriteRegister(2, 0);
-                                    IncreasePC();
-                                    delete buffer;
-                                    return;
-                                }
-                            }
-                            
-                            lastNumIndex = i - 1;				
-                            break;                           
-                        }
-                        else if(buffer[i] < '0' && buffer[i] > '9')
+			if(buffer[i] < '0' && buffer[i] > '9') // Neu nhap vao ky tu khong phai so thi bao loi va dung.
                         {
                             printf("\n\n The integer number is not valid");
                             DEBUG('a', "\n The integer number is not valid");
@@ -210,29 +161,29 @@ void ExceptionHandler(ExceptionType which)
                             delete buffer;
                             return;
                         }
-                        lastNumIndex = i;    
+                        lastNumIndex = i;
                     }			
                     
-                    
+                    // Chuyen chuoi ve so nguyen.
                     for(int i = firstNumIndex; i<= lastNumIndex; i++)
                     {
-                        number = number * 10 + (int)(buffer[i] - 48); 
+                        number = number * 10 + (int)(buffer[i] - 48);
                     }
                     
                     
-                    if(isNegative)
+                    if(isNegative) // Xu ly so am.
                     {
                         number = number * -1;
                     }
                     machine->WriteRegister(2, number);
                     IncreasePC();
                     delete buffer;
-                    return;		
+                    return;
 		}
 
-		case SC_PrintInt:{	
+		case SC_PrintInt:{
 		    
-                    int number = machine->ReadRegister(4);
+                    int number = machine->ReadRegister(4); // Doc so nguyen.
 		    if(number == 0)
                     {
                         gSynchConsole->Write("0", 1); 
@@ -245,7 +196,7 @@ void ExceptionHandler(ExceptionType which)
                     int numberOfNum = 0; 
                     int firstNumIndex = 0; 
 			
-                    if(number < 0)
+                    if(number < 0) // Xu ly so am.
                     {
                         isNegative = true;
                         number = number * -1; 
@@ -253,7 +204,7 @@ void ExceptionHandler(ExceptionType which)
                     } 	
                     
                     int t_number = number; 
-                    while(t_number)
+                    while(t_number) // Dem so chu so cua so nguyen.
                     {
                         numberOfNum++;
                         t_number /= 10;
@@ -261,14 +212,15 @@ void ExceptionHandler(ExceptionType which)
     
 		    
                     char* buffer;
-                    int MAX_BUFFER = 255;
+                    int MAX_BUFFER = 20;
                     buffer = new char[MAX_BUFFER + 1];
+		    // Chuyen so thanh chuoi ky tu de in.
                     for(int i = firstNumIndex + numberOfNum - 1; i >= firstNumIndex; i--)
                     {
                         buffer[i] = (char)((number % 10) + 48);
                         number /= 10;
                     }
-                    if(isNegative)
+                    if(isNegative) // Xu ly so am.
                     {
                         buffer[0] = '-';
 			buffer[numberOfNum + 1] = 0;
@@ -287,18 +239,17 @@ void ExceptionHandler(ExceptionType which)
 
 		case SC_ReadChar:{
 
-			
-			int maxBytes = 255;
+			int maxBytes = 255; // Doc toi da 255 ky tu.
 			char* buffer = new char[255];
 			int numBytes = gSynchConsole->Read(buffer, maxBytes);
 
-			if(numBytes > 1) 
+			if(numBytes > 1) // Khi nhap nhieu hon 1 ky tu thi bao loi va dung.
 			{
 				printf("Chi duoc nhap duy nhat 1 ky tu!");
 				DEBUG('a', "\nERROR: Chi duoc nhap duy nhat 1 ky tu!");
 				machine->WriteRegister(2, 0);
 			}
-			else if(numBytes == 0) 
+			else if(numBytes == 0) // Nhap ky tu roi thi bao loi va dung.
 			{
 				printf("Ky tu rong!");
 				DEBUG('a', "\nERROR: Ky tu rong!");
@@ -323,28 +274,27 @@ void ExceptionHandler(ExceptionType which)
 
 		}
 		case SC_ReadString:{
-			
 			int virtAddr, length;
 			char* buffer;
-			virtAddr = machine->ReadRegister(4); 
-			length = machine->ReadRegister(5); 
-			buffer = User2System(virtAddr, length); 
-			gSynchConsole->Read(buffer, length); 
-			System2User(virtAddr, length, buffer); 
-			delete buffer; 
-			IncreasePC(); 
+			virtAddr = machine->ReadRegister(4);
+			length = machine->ReadRegister(5);
+			buffer = User2System(virtAddr, length);
+			gSynchConsole->Read(buffer, length);
+			System2User(virtAddr, length, buffer);
+			delete buffer;
+			IncreasePC();
 			return;
 			
 		}
-		case SC_PrintString:{			
+		case SC_PrintString:{
 			int virtAddr;
 			char* buffer;
-			virtAddr = machine->ReadRegister(4); 
-			buffer = User2System(virtAddr, 255); 
+			virtAddr = machine->ReadRegister(4);
+			buffer = User2System(virtAddr, 255);
 			int length = 0;
-			while (buffer[length] != 0) length++; 
-			gSynchConsole->Write(buffer, length + 1); 
-			delete buffer; 
+			while (buffer[length] != 0) length++;
+			gSynchConsole->Write(buffer, length + 1);
+			delete buffer;
 			break;
 		}
 		

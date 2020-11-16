@@ -35,7 +35,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort ReadString PrintString help ascii
+all: halt shell matmult sort ReadString PrintString help ascii ReadInt PrintInt
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -89,3 +89,15 @@ ascii.o: ascii.c
 ascii: ascii.o start.o
 	$(LD) $(LDFLAGS) start.o ascii.o -o ascii.coff
 	../bin/coff2noff ascii.coff ascii
+
+ReadInt.o: ReadInt.c
+	$(CC) $(CFLAGS) -c ReadInt.c
+ReadInt: ReadInt.o start.o
+	$(LD) $(LDFLAGS) start.o ReadInt.o -o ReadInt.coff
+	../bin/coff2noff ReadInt.coff ReadInt
+
+PrintInt.o: PrintInt.c
+	$(CC) $(CFLAGS) -c PrintInt.c
+PrintString: PrintInt.o start.o
+	$(LD) $(LDFLAGS) start.o PrintInt.o -o PrintInt.coff
+	../bin/coff2noff PrintInt.coff PrintInt

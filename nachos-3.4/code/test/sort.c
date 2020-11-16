@@ -13,36 +13,54 @@
 int main()
 {   
     int A[100];
-    int i, j, tmp, n,count,select;
+    int i, j, temp, n, count, select;
     PrintString("Nhap n: ");
     n = ReadInt();
-    /* first initialize the array, in reverse sorted order */
+    while (n > 100 || n <= 0) {
+	PrintString("Nhap n <= 100. Nhap lai: ");
+	n = ReadInt();
+    }
+
     for (i = 0; i < n; i++)
     {
 	count = i+1;
 	PrintString("A[");
 	PrintInt(count);
-	PrintString("]: ");		
+	PrintString("]: ");
         A[i] = ReadInt();
     }
     PrintString("Ban muon sap xep giam dan(0) hay tang dan(1)\n");
     PrintString("Nhap lua chon: ");
     select = ReadInt();
-    /* then sort! */
-	
-    for (i = 0; i < n-1; i++)       
-    	for (j = 0; j < n-i-1; j++)  
-        	if (A[j] > A[j+1] && select==1||A[j] < A[j+1] && select==0){
-			tmp = A[j];
-	      		A[j] = A[j + 1];
-	      		A[j + 1] = tmp;
+    while (select != 0 && select != 1) {
+	PrintString("Lua chon 0 (giam) hoac 1 (tang). Nhap lai: ");
+	select = ReadInt();
+    }
+    // Bubble sort
+    if (select == 1) { // Sap xep tang dan.
+	for (i = 0; i < n-1; i++)       
+	   for (j = 0; j < n-i-1; j++)  
+		if (A[j] > A[j+1]) {
+			temp = A[j];
+		      	A[j] = A[j + 1];
+		      	A[j + 1] = temp;
 		}
-            
-    PrintString("Mang sau khi sap xep\n");
+    } 
+    else { // Sap xep giam dan.
+	for (i = 0; i < n-1; i++)       
+	    for (j = 0; j < n-i-1; j++)  
+		if (A[j] < A[j+1]) {
+			temp = A[j];
+		      	A[j] = A[j + 1];
+		      	A[j + 1] = temp;
+		}
+    }
+         
+    PrintString("Mang sau khi sap xep: \n");
     for (i = 0; i < n; i++)
     {
 	PrintInt(A[i]);
-	PrintString("\t");     
+	PrintString("\t");
     }    
-    return 0;	/* and then we're done -- should be 0! */
+    return 0;
 }

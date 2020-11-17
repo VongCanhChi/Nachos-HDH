@@ -136,7 +136,7 @@ void ExceptionHandler(ExceptionType which)
 		}
 		case SC_ReadInt:{
                     char* buffer;
-                    int MAX_BUFFER = 20; // So lon nhat ma c++ co the bieu dien duoc gom khong qua 20 chu so.
+                    int MAX_BUFFER = 255; 
                     buffer = new char[MAX_BUFFER + 1];
                     int numbytes = gSynchConsole->Read(buffer, MAX_BUFFER);
                     int number = 0;
@@ -212,7 +212,7 @@ void ExceptionHandler(ExceptionType which)
     
 		    
                     char* buffer;
-                    int MAX_BUFFER = 20;
+                    int MAX_BUFFER = 255;
                     buffer = new char[MAX_BUFFER + 1];
 		    // Chuyen so thanh chuoi ky tu de in.
                     for(int i = firstNumIndex + numberOfNum - 1; i >= firstNumIndex; i--)

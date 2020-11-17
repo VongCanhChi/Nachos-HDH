@@ -156,7 +156,7 @@ void ExceptionHandler(ExceptionType which)
 			machine->WriteRegister(2, 0);
                         IncreasePC();
                         delete buffer;
-                        return;
+                        return 0;
 		    }
                                        
                     for(int i = firstPos; i < numbytes; i++)				
@@ -168,7 +168,7 @@ void ExceptionHandler(ExceptionType which)
                             machine->WriteRegister(2, 0);
                             IncreasePC();
                             delete buffer;
-                            return;
+                            return 0;
                         }
                         lastPos = i;
                     }			
@@ -178,8 +178,7 @@ void ExceptionHandler(ExceptionType which)
                     {
                         number = number * 10 + (int)(buffer[i] - 48);
                     }
-                    
-                    
+			
                     if(isNegative) // Xu ly so am.
                     {
                         number = number * -1;
@@ -187,11 +186,10 @@ void ExceptionHandler(ExceptionType which)
                     machine->WriteRegister(2, number);//tra gia tri number vao thanh ghi 2 
                     IncreasePC();
                     delete buffer;
-                    return;
+                    return 0;
 		}
 
 		case SC_PrintInt:{
-		    
                     int number = machine->ReadRegister(4); // Doc so nguyen.
 		    if(number == 0)
                     {
@@ -199,8 +197,6 @@ void ExceptionHandler(ExceptionType which)
                         IncreasePC();
                         return;    
                     }
-                    
-                    
                     bool isNegative = false; 
                     int numLen = 0; 
                     int firstPos = 0; 
@@ -218,8 +214,7 @@ void ExceptionHandler(ExceptionType which)
                         numLen++;
                         countNum /= 10;
                     }
-    
-		    
+			
                     char* buffer;
                     int maxBuffer = 255;
                     buffer = new char[maxBuffer + 1];
@@ -242,12 +237,10 @@ void ExceptionHandler(ExceptionType which)
                     gSynchConsole->Write(buffer, numLen);
                     delete buffer;
                     IncreasePC();
-                    return;        			
-					
+                    return;		
 		}
 
 		case SC_ReadChar:{
-
 			int maxBytes = 255; // Doc toi da 255 ky tu.
 			char* buffer = new char[255];
 			int numBytes = gSynchConsole->Read(buffer, maxBytes);
@@ -264,24 +257,20 @@ void ExceptionHandler(ExceptionType which)
 				DEBUG('a', "\nERROR: Ky tu rong!");
 				machine->WriteRegister(2, 0);
 			}
-			else
-			{				
+			else {				
 				char c = buffer[0];
 				machine->WriteRegister(2, c);
 			}
-
 			delete buffer;
-			
 			break;
 		}
 
 		case SC_PrintChar:{
-			
 			char c = (char)machine->ReadRegister(4); 
 			gSynchConsole->Write(&c, 1);
 			break;
-
 		}
+				
 		case SC_ReadString:{
 			int virtAddr, length;
 			char* buffer;
@@ -293,8 +282,8 @@ void ExceptionHandler(ExceptionType which)
 			delete buffer;
 			IncreasePC();
 			return;
-			
 		}
+				
 		case SC_PrintString:{
 			int virtAddr;
 			char* buffer;

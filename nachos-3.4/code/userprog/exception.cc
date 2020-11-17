@@ -80,7 +80,7 @@ void ExceptionHandler(ExceptionType which)
     	int type = machine->ReadRegister(2);
 	
 	switch (which) {
-	case NoException: //tra quyen cho hdh
+	case NoException: //tra quyen cho hdh, khong xay ra loi
 		return;
 
 	case PageFaultException:{ // khong tim thay ban dich hop le 
@@ -89,37 +89,37 @@ void ExceptionHandler(ExceptionType which)
 		interrupt->Halt(); //dong hdh
 		break;
 	}
-	case ReadOnlyException:{ //viet vao file chi doc 
+	case ReadOnlyException:{ //viet vao file duoc mac dinh chi doc 
 		DEBUG('a', "\n Write attempted to page marked read-only");
 		printf("\n\n Write attempted to page marked read-only");
 		interrupt->Halt();
 		break;
 	}
-	case BusErrorException:{ // ban dich dan den dia chi khong hop le 
+	case BusErrorException:{ // ket qua duong dan den dia chi vat li khong hop le
 		DEBUG('a', "\n Translation resulted invalid physical address");
 		printf("\n\n Translation resulted invalid physical address");
 		interrupt->Halt();
 		break;
 	}
-	case AddressErrorException:{ // khong danh dau hoac vuot qua thanh dia chi 
+	case AddressErrorException:{ // khong tham chieu den hoac vuot qua thanh dia chi 
 		DEBUG('a', "\n Unaligned reference or one that was beyond the end of the address space");
 		printf("\n\n Unaligned reference or one that was beyond the end of the address space");
 		interrupt->Halt();
 		break;
 	}
-	case OverflowException:{ // tran so trong cong hoac tru
+	case OverflowException:{ // tran so trong phep cong hoac tru
 		DEBUG('a', "\nInteger overflow in add or sub.");
 		printf("\n\n Integer overflow in add or sub.");
 		interrupt->Halt();
 		break;
 	}
-	case IllegalInstrException:{ // chua cai dat hoac han che instr
+	case IllegalInstrException:{ // chua cai dat hoac han che ve instr
 		DEBUG('a', "\n Unimplemented or reserved instr.");
 		printf("\n\n Unimplemented or reserved instr.");
 		interrupt->Halt();
 		break;
 	}
-	case NumExceptionTypes:{ // loai so ngoai le 
+	case NumExceptionTypes:{ //  ngoai le loai so
 		DEBUG('a', "\n Number exception types");
 		printf("\n\n Number exception types");
 		interrupt->Halt();

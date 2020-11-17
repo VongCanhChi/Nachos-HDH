@@ -80,46 +80,46 @@ void ExceptionHandler(ExceptionType which)
     	int type = machine->ReadRegister(2);
 	
 	switch (which) {
-	case NoException:
+	case NoException: //tra quyen cho hdh
 		return;
 
-	case PageFaultException:{
-		DEBUG('a', "\n No valid translation found");
-		printf("\n\n No valid translation found");
-		interrupt->Halt();
+	case PageFaultException:{ // khong tim thay ban dich hop le 
+		DEBUG('a', "\n No valid translation found"); // xuat thong bao o che do debug 
+		printf("\n\n No valid translation found"); // xuat thong bao o che do run time 
+		interrupt->Halt(); //dong hdh
 		break;
 	}
-	case ReadOnlyException:{
+	case ReadOnlyException:{ //viet vao file chi doc 
 		DEBUG('a', "\n Write attempted to page marked read-only");
 		printf("\n\n Write attempted to page marked read-only");
 		interrupt->Halt();
 		break;
 	}
-	case BusErrorException:{
+	case BusErrorException:{ // ban dich dan den dia chi khong hop le 
 		DEBUG('a', "\n Translation resulted invalid physical address");
 		printf("\n\n Translation resulted invalid physical address");
 		interrupt->Halt();
 		break;
 	}
-	case AddressErrorException:{
+	case AddressErrorException:{ // khong danh dau hoac vuot qua thanh dia chi 
 		DEBUG('a', "\n Unaligned reference or one that was beyond the end of the address space");
 		printf("\n\n Unaligned reference or one that was beyond the end of the address space");
 		interrupt->Halt();
 		break;
 	}
-	case OverflowException:{
+	case OverflowException:{ // tran so trong cong hoac tru
 		DEBUG('a', "\nInteger overflow in add or sub.");
 		printf("\n\n Integer overflow in add or sub.");
 		interrupt->Halt();
 		break;
 	}
-	case IllegalInstrException:{
+	case IllegalInstrException:{ // chua cai dat hoac han che instr
 		DEBUG('a', "\n Unimplemented or reserved instr.");
 		printf("\n\n Unimplemented or reserved instr.");
 		interrupt->Halt();
 		break;
 	}
-	case NumExceptionTypes:{
+	case NumExceptionTypes:{ // loai so ngoai le 
 		DEBUG('a', "\n Number exception types");
 		printf("\n\n Number exception types");
 		interrupt->Halt();
@@ -136,7 +136,7 @@ void ExceptionHandler(ExceptionType which)
 		}
 		case SC_ReadInt:{
                     char* buffer;
-                    int MAX_BUFFER = 255; 
+                     int MAX_BUFFER = 255; 
                     buffer = new char[MAX_BUFFER + 1];
                     int numbytes = gSynchConsole->Read(buffer, MAX_BUFFER);
                     int number = 0;
@@ -175,7 +175,7 @@ void ExceptionHandler(ExceptionType which)
                     {
                         number = number * -1;
                     }
-                    machine->WriteRegister(2, number);
+                    machine->WriteRegister(2, number);//tra gia tri number vao thanh ghi 2 
                     IncreasePC();
                     delete buffer;
                     return;
@@ -276,11 +276,11 @@ void ExceptionHandler(ExceptionType which)
 		case SC_ReadString:{
 			int virtAddr, length;
 			char* buffer;
-			virtAddr = machine->ReadRegister(4);
-			length = machine->ReadRegister(5);
+			virtAddr = machine->ReadRegister(4);// doc dia chi tu thanh ghi 4
+			length = machine->ReadRegister(5);// doc gia tri length tu thanh ghi 5 
 			buffer = User2System(virtAddr, length);
 			gSynchConsole->Read(buffer, length);
-			System2User(virtAddr, length, buffer);
+			System2User(virtAddr, length, buffer);// ghi chuoi buffer voi do dai length vao vung nho virtAddr dang giu
 			delete buffer;
 			IncreasePC();
 			return;
@@ -290,7 +290,7 @@ void ExceptionHandler(ExceptionType which)
 			int virtAddr;
 			char* buffer;
 			virtAddr = machine->ReadRegister(4);
-			buffer = User2System(virtAddr, 255);
+			buffer = User2System(virtAddr, 255); // chuyen chuoi trong con tro virtAddr sang vung nho buffer
 			int length = 0;
 			while (buffer[length] != 0) length++;
 			gSynchConsole->Write(buffer, length + 1);
@@ -301,6 +301,6 @@ void ExceptionHandler(ExceptionType which)
 		default:
 			break;
 		}
-		IncreasePC();
+		IncreasePC();//tang program counter
 	}
 }

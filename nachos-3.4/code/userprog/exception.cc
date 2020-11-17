@@ -149,6 +149,15 @@ void ExceptionHandler(ExceptionType which)
                         firstNumIndex = 1;
                         lastNumIndex = 1;                        			   		
                     }
+			
+		    if (numbytes > 20) {// Vi C chi bieu dien duoc so co toi da 20 chu so nen neu nhap so qua lon thi bao loi va dung.
+			printf("\n\n The integer number is too big and it cannot be represented by C");
+                        DEBUG('a', "\n The integer number is too big and it cannot be represented by C");
+			machine->WriteRegister(2, 0);
+                        IncreasePC();
+                        delete buffer;
+                        return;
+		    }
                                        
                     for(int i = firstNumIndex; i < numbytes; i++)				
                     {

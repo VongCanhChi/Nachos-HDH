@@ -136,21 +136,21 @@ void ExceptionHandler(ExceptionType which)
 		}
 		case SC_ReadInt:{
                     char* buffer;
-                     int MAX_BUFFER = 255; 
-                    buffer = new char[MAX_BUFFER + 1];
-                    int numbytes = gSynchConsole->Read(buffer, MAX_BUFFER);
+                    int maxBuffer = 255; 
+                    buffer = new char[maxBuffer + 1];
+                    int numbytes = gSynchConsole->Read(buffer, maxBuffer);
                     int number = 0;
                     bool isNegative = false;
-                    int firstNumIndex = 0;
-                    int lastNumIndex = 0;
+                    int firstPos = 0;
+                    int lastPos = 0;
                     if(buffer[0] == '-') // Xu ly khi nhap so am.
                     {
                         isNegative = true;
-                        firstNumIndex = 1;
-                        lastNumIndex = 1;                        			   		
+                        firstPos = 1;
+                        lastPos = 1;                        			   		
                     }
 			
-		    if (numbytes > 20) {// Vi C chi bieu dien duoc so co toi da 20 chu so nen neu nhap so qua lon thi bao loi va dung.
+		    if (numbytes > 20) { // Vi C chi bieu dien duoc so co toi da 20 chu so nen neu nhap so qua lon thi bao loi va dung.
 			printf("\n\n The integer number is too big and it cannot be represented by C");
                         DEBUG('a', "\n The integer number is too big and it cannot be represented by C");
 			machine->WriteRegister(2, 0);
@@ -159,7 +159,7 @@ void ExceptionHandler(ExceptionType which)
                         return;
 		    }
                                        
-                    for(int i = firstNumIndex; i < numbytes; i++)				
+                    for(int i = firstPos; i < numbytes; i++)				
                     {
 			if(buffer[i] < '0' && buffer[i] > '9') // Neu nhap vao ky tu khong phai so thi bao loi va dung.
                         {
@@ -170,11 +170,11 @@ void ExceptionHandler(ExceptionType which)
                             delete buffer;
                             return;
                         }
-                        lastNumIndex = i;
+                        lastPos = i;
                     }			
                     
                     // Chuyen chuoi ve so nguyen.
-                    for(int i = firstNumIndex; i<= lastNumIndex; i++)
+                    for(int i = firstPos; i<= lastPos; i++)
                     {
                         number = number * 10 + (int)(buffer[i] - 48);
                     }
@@ -202,29 +202,29 @@ void ExceptionHandler(ExceptionType which)
                     
                     
                     bool isNegative = false; 
-                    int numberOfNum = 0; 
-                    int firstNumIndex = 0; 
+                    int numLen = 0; 
+                    int firstPos = 0; 
 			
                     if(number < 0) // Xu ly so am.
                     {
                         isNegative = true;
                         number = number * -1; 
-                        firstNumIndex = 1; 
+                        firstPos = 1; 
                     } 	
                     
-                    int t_number = number; 
-                    while(t_number) // Dem so chu so cua so nguyen.
+                    int countNum = number; 
+                    while(countNum) // Dem so chu so cua so nguyen.
                     {
-                        numberOfNum++;
-                        t_number /= 10;
+                        numLen++;
+                        countNum /= 10;
                     }
     
 		    
                     char* buffer;
-                    int MAX_BUFFER = 255;
-                    buffer = new char[MAX_BUFFER + 1];
+                    int maxBuffer = 255;
+                    buffer = new char[maxBuffer + 1];
 		    // Chuyen so thanh chuoi ky tu de in.
-                    for(int i = firstNumIndex + numberOfNum - 1; i >= firstNumIndex; i--)
+                    for(int i = firstPos + numLen - 1; i >= firstPos; i--)
                     {
                         buffer[i] = (char)((number % 10) + 48);
                         number /= 10;
@@ -232,14 +232,14 @@ void ExceptionHandler(ExceptionType which)
                     if(isNegative) // Xu ly so am.
                     {
                         buffer[0] = '-';
-			buffer[numberOfNum + 1] = 0;
-                        gSynchConsole->Write(buffer, numberOfNum + 1);
+			buffer[numLen + 1] = 0;
+                        gSynchConsole->Write(buffer, numLen + 1);
                         delete buffer;
                         IncreasePC();
                         return;
                     }
-		    buffer[numberOfNum] = 0;	
-                    gSynchConsole->Write(buffer, numberOfNum);
+		    buffer[numLen] = 0;	
+                    gSynchConsole->Write(buffer, numLen);
                     delete buffer;
                     IncreasePC();
                     return;        			

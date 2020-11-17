@@ -29,11 +29,11 @@
 
 void IncreasePC()
 {
-	int counter = machine->ReadRegister(PCReg);
-   	machine->WriteRegister(PrevPCReg, counter);
-    	counter = machine->ReadRegister(NextPCReg);
-    	machine->WriteRegister(PCReg, counter);
-   	machine->WriteRegister(NextPCReg, counter + 4);
+	int counter = machine->ReadRegister(PCReg); //doc dia chi thanh ghi hien tai
+   	machine->WriteRegister(PrevPCReg, counter); //ghi vao thanh ghi truoc 
+    	counter = machine->ReadRegister(NextPCReg); // doc gia tri thanh ghi ke tiep
+    	machine->WriteRegister(PCReg, counter); // ghi vao thanh ghi hien tai 
+   	machine->WriteRegister(NextPCReg, counter + 4); //nap 4 byte cho thanh ghi ke tiep 
 }
 
 // Ham sao chep vung nho User sang vung nho System.

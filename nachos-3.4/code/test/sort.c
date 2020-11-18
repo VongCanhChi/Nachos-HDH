@@ -17,7 +17,7 @@ int main()
     PrintString("Nhap n: ");
     n = ReadInt();
     while (n > 100 || n <= 0) {
-	PrintString("Nhap n <= 100. Nhap lai: ");
+	PrintString("Nhap 0 < n <= 100. Nhap lai: ");
 	n = ReadInt();
     }
 

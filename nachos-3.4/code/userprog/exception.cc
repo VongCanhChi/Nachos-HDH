@@ -151,24 +151,24 @@ void ExceptionHandler(ExceptionType which)
                     }
 			
 		    if (numbytes > 20) { // Vi C chi bieu dien duoc so co toi da 20 chu so nen neu nhap so qua lon thi bao loi va dung.
-			printf("\n\n The integer number is too big and it cannot be represented by C");
-                        DEBUG('a', "\n The integer number is too big and it cannot be represented by C");
+			printf("\n\nThe integer number is too big and it cannot be represented by C");
+                        DEBUG('a', "\nThe integer number is too big and it cannot be represented by C");
 			machine->WriteRegister(2, 0);
                         IncreasePC();
                         delete buffer;
-                        return 0;
+                        return;
 		    }
                                        
                     for(int i = firstPos; i < numbytes; i++)				
                     {
-			if(buffer[i] < '0' && buffer[i] > '9') // Neu nhap vao ky tu khong phai so thi bao loi va dung.
+			if(buffer[i] < '0' || buffer[i] > '9') // Neu nhap vao ky tu khong phai so thi bao loi va dung.
                         {
-                            printf("\n\n The integer number is not valid");
-                            DEBUG('a', "\n The integer number is not valid");
+                            printf("\n\nThe integer number is not valid");
+                            DEBUG('a', "\nThe integer number is not valid");
                             machine->WriteRegister(2, 0);
                             IncreasePC();
                             delete buffer;
-                            return 0;
+                            return;
                         }
                         lastPos = i;
                     }			
@@ -186,7 +186,7 @@ void ExceptionHandler(ExceptionType which)
                     machine->WriteRegister(2, number);//tra gia tri number vao thanh ghi 2 
                     IncreasePC();
                     delete buffer;
-                    return 0;
+                    return;
 		}
 
 		case SC_PrintInt:{

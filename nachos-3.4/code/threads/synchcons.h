@@ -1,5 +1,3 @@
-// CAE - MULTI - SYNCHCONSOLE DEFINITION
-
 #include "console.h"
 
 class SynchConsole {

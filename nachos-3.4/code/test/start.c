@@ -50,13 +50,6 @@ Halt:
 	j	$31
 	.end Halt
 
-	.globl Exit
-	.ent	Exit
-Exit:
-	addiu $2,$0,SC_Exit
-	syscall
-	j	$31
-	.end Exit
 
 	.globl Exec
 	.ent	Exec
@@ -66,6 +59,7 @@ Exec:
 	j	$31
 	.end Exec
 
+
 	.globl Join
 	.ent	Join
 Join:
@@ -73,46 +67,6 @@ Join:
 	syscall
 	j	$31
 	.end Join
-
-	.globl Create
-	.ent	Create
-Create:
-	addiu $2,$0,SC_Create
-	syscall
-	j	$31
-	.end Create
-
-	.globl Open
-	.ent	Open
-Open:
-	addiu $2,$0,SC_Open
-	syscall
-	j	$31
-	.end Open
-
-	.globl Read
-	.ent	Read
-Read:
-	addiu $2,$0,SC_Read
-	syscall
-	j	$31
-	.end Read
-
-	.globl Write
-	.ent	Write
-Write:
-	addiu $2,$0,SC_Write
-	syscall
-	j	$31
-	.end Write
-
-	.globl Close
-	.ent	Close
-Close:
-	addiu $2,$0,SC_Close
-	syscall
-	j	$31
-	.end Close
 
 	.globl Fork
 	.ent	Fork
